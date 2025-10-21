@@ -425,40 +425,26 @@ Total Estimated Duration
 
 The source code and documentation for this project are hosted on a publicly accessible GitHub repository, and the system demonstration is provided via an unlisted YouTube video.
 
-Resource
-
-Link
+Resource Link
 
 GitHub Repository
 
 https://github.com/ThembaTshudufhadzo/PROG6212POEPART2-CMCSWebApp.git
-
 YouTube Video Demo
-
 https://youtu.be/GKdE6K-KUks
 
-6. References
-
-Type
+6. References Type
 
 Reference
 
 Book
-
 Freeman, A. and Sandell, J. (2018). Pro ASP.NET Core MVC 2. 7th ed. Berkeley, CA: Apress.
-
 Website
-
 GitHub. (2025). Git and GitHub Documentation. Available at: https://docs.github.com/en/ (Accessed: 16 September 2025).
 
 Website
-
 Mermaid. (2025). Mermaid Documentation. Available at: https://mermaid.js.org/documentation/ (Accessed: 16 September 2025).
-
 Website
-
 Microsoft. (2025a). Introduction to ASP.NET Core MVC. Available at: https://docs.microsoft.com/en-us/aspnet/core/mvc/overview (Accessed: 15 October 2025).
-
 Website
-
 Microsoft. (2025b). Entity Framework Core Documentation. Available at: https://docs.microsoft.com/en-us/ef/core/ (Accessed: 15 October 2025).

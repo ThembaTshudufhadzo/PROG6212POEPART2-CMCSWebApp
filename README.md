@@ -1,29 +1,13 @@
 PROG6212 POE PART 2: Contract Monthly Claim System (CMCS)
-
 Functional Implementation and Unit Testing Documentation
-
 Detail
-
 Value
-
-Student Name
-
-Themba Tshudufhadzo
-
-Student ID
-
-ST10461617
-
-Course
-
-Programming 2B
-
+Student Name: Themba Tshudufhadzo
+Student Number :ST10461617
+Course:Programming 2B
 Project
-
 POE PART 2: Functional Implementation and Unit Testing
-
 🧭 Table of Contents
-
 Executive Summary and Functional Implementation
 
 1.1. Project Overview and Functional Design
@@ -33,7 +17,6 @@ Executive Summary and Functional Implementation
 1.3. GUI/UI Layout Implementation and Functionality
 
 Data Modeling
-
 2.1. UML Class Diagram and Key Relationships
 
 Unit Testing and Quality Assurance

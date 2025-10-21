@@ -164,11 +164,8 @@ Returns a dashboard object where TotalClaimsCount $> 0$.
 These tests validate the controller's actions, focusing on correct routing, view rendering, and form submission handling.
 
 Test Method Name
-
 Purpose
-
 Key Assertions
-
 Index_ReturnsViewWithClaims
 
 Checks the Lecturer's index page loads and passes claims to the view.
@@ -206,11 +203,8 @@ Checks the Coordinator's verification action.
 Calls UpdateClaimStatusAsync (VerifiedByCoordinator), redirects to Home/CoordinatorDashboard.
 
 Approve_WithValidId_UpdatesStatusAndRedirects
-
 Checks the Manager's approval action.
-
 Calls UpdateClaimStatusAsync (ApprovedByManager), redirects to Home/ManagerDashboard.
-
 Reject_AsCoordinator_UpdatesStatusAndRedirects
 
 Tests the Coordinator's rejection action.
@@ -246,7 +240,6 @@ Strictly constrained to the core business logic (calculation) and the state tran
 4.1. Historical Project Plan
 
 The table below outlines the original project plan used to guide development through both Part 1 and Part 2.
-
 Phase
 
 Task ID
@@ -260,34 +253,24 @@ Estimated Week
 Phase 1: Planning & Prototyping
 
 1.1.
-
 Finalise the Project Scope and Requirements
 
 None
-
 Week 1
 
-
-
 1.2.
-
 Set up the ASP.NET Core MVC Project Structure
 
 1.1
-
 Week 1
 
 
 
 1.3.
-
 Design the Database Schema (UML Class Diagram)
 
 1.2
-
 Week 2
-
-
 
 1.4.
 
@@ -296,8 +279,6 @@ Implement ASP.NET Identity and Role-Based Setup
 1.2
 
 Week 2
-
-
 
 1.5.
 

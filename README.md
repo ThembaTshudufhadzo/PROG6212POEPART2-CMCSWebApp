@@ -1,511 +1,481 @@
-# PROG6212POEPART2-CMCSWebApp
+PROG6212 POE PART 2: Contract Monthly Claim System (CMCS)
 
-Tshudufhadzo Themba 
+Functional Implementation and Unit Testing Documentation
 
-ST10461617 
+Detail
 
-Programming 2B 
+Value
 
-POE PART 2: Functional Implementation and UnitTesting 
+Student Name
 
- 
+Themba Tshudufhadzo
 
-Table of Contents 
+Student ID
 
-​​ 
+ST10461617
 
-​ 
+Course
 
-​ 
+Programming 2B
 
-​ 
+Project
 
-​ 
+POE PART 2: Functional Implementation and Unit Testing
 
-​ 
+🧭 Table of Contents
 
-​ 
+Executive Summary and Functional Implementation
 
-​ 
+1.1. Project Overview and Functional Design
 
-​ 
+1.2. Database Structure and Data Persistence
 
-​ 
+1.3. GUI/UI Layout Implementation and Functionality
 
-​ 
+Data Modeling
 
-​ 
+2.1. UML Class Diagram and Key Relationships
 
-​ 
+Unit Testing and Quality Assurance
 
-​ 
+3.1. ClaimService Tests (8 Total)
 
-​ 
+3.2. ClaimsController Tests (9 Total)
 
-​ 
+3.3. Assumptions, Constraints, and Testing Scope
 
-​ 
+Project Management (Historical)
 
-​​ 
+4.1. Historical Project Plan
 
- 
+Submission Details & Links
 
- 
+References
 
-1. Documentation: Functional Implementation 
+1. Executive Summary and Functional Implementation
 
-1.1. Project Overview and Functional Design 
+The Contract Monthly Claim System (CMCS) has been developed as a fully functional web application using the ASP.NET Core MVC framework. The continued use of the Model-View-Controller (MVC) architectural pattern ensures a robust separation of concerns, which enhances the system's maintainability and scalability.
 
-The Contract Monthly Claim System (CMCS) has successfully transitioned from a preliminary prototype (Part 1) to a fully functional web application developed using the ASP.NET Core MVC framework (Microsoft, 2025a). The continued selection of the Model-View-Controller (MVC) architectural pattern remains foundational, as it promotes a robust separation of concerns, thereby enhancing the system's maintainability and scalability (Freeman and Sandell, 2018). 
+The core objective of CMCS is to streamline the monthly claim submission and approval process for contract lecturers. Implementation in Part 2 focused on integrating core business logic, data persistence, and Role-Based Authorization (RBA) necessary for operational security.
 
-The primary objective of CMCS is now fully realized: to automate and streamline the monthly claim submission and approval process for contract lecturers. The implementation phase (Part 2) focused on establishing the core business logic, data persistence, and role-based security necessary for real-world operations. 
+1.1. Project Overview and Functional Design
 
-Key Implementation Strategies for Part 2: 
+Strategy
 
-Data Persistence: Entity Framework Core (EF Core) was integrated as the Object-Relational Mapper (ORM) to manage the interaction between the application and the relational database, enabling all required CRUD (Create, Read, Update, Delete) operations for claim and document data (Microsoft, 2025b). 
+Detail
 
-Role-Based Security: The application uses ASP.NET Identity to manage user authentication and employs strict Role-Based Authorization (RBA). Access to functional areas, such as approval buttons and specific dashboards, is strictly governed by the user’s assigned role (Lecturer, Programme Coordinator, or Academic Manager). 
+Technology
 
-Business Logic: Server-side logic within the ClaimsController now calculates the total claim amount (HoursWorked * HourlyRate) upon submission and manages the crucial status update lifecycle (e.g., PendingReview to VerifiedByCoordinator). 
+ASP.NET Core MVC (C#)
 
-1.2. Database Structure and Data Persistence 
+Data Persistence
 
-The database structure defined in Part 1 has been instantiated using EF Core migrations. This structure ensures data integrity and the necessary relationships to support the claim lifecycle. 
+Entity Framework Core (EF Core) as the ORM to manage CRUD operations.
 
-Claim Entity: This entity is central, maintaining essential details like LecturerName, ClaimPeriod, and the critical Status property (an enumerated type). The Status property is the primary mechanism for controlling the claim's visibility and progression through the approval stages. 
+Role-Based Security
 
-Document Entity: This entity maintains a crucial one-to-many relationship with the Claim. It stores metadata such as the OriginalFileName and the secure SupportingDocumentPath, confirming that the associated documentation is securely tracked and linked to the correct claim record. All data manipulation is handled exclusively through asynchronous methods provided by EF Core to maintain application responsiveness. 
+ASP.NET Identity enforces strict RBA for Lecturer, Programme Coordinator, and Academic Manager.
 
-1.3. GUI/UI Layout Implementation and Functionality 
+Business Logic
 
-The user interface, built with Bootstrap, is now entirely functional, providing specific workflows for each user role. The focus shifted from static display to dynamic interaction, state representation, and secure command execution. 
+Server-side logic in the ClaimsController calculates the total claim amount (HoursWorked * HourlyRate) and manages the status update lifecycle.
 
-Claim Submission and File Upload (Lecturer) 
+1.2. Database Structure and Data Persistence
 
-The Lecturer view is implemented as a secure form, enabling a POST request to the ClaimsController. Crucial implementation features include: 
+The structure, defined in Part 1, was instantiated using EF Core migrations.
 
-Secure File Handling: The form is configured with enctype="multipart/form-data" to allow the submission of supporting documents. Server-side code handles the IFormFile stream, restricting file types (e.g., to PDF/DOCX) and saving the file to a controlled, secure path on the file system. 
+Claim Entity: Central to the system, storing metadata, claim period, and the critical Status property (an enumerated type) that controls visibility and progression.
 
-Data Mapping: Model binding automatically maps form inputs for HoursWorked and HourlyRate to the Claim object, which is then persisted to the database with the initial status set to PendingReview. 
+Document Entity: Maintains a one-to-many relationship with Claim. Tracks OriginalFileName and the secure SupportingDocumentPath, linking evidence to the correct claim record.
 
-Review and Approval Workflows (Coordinator and Manager) 
+All data manipulation is handled exclusively through asynchronous methods provided by EF Core.
 
-The dashboards for the Programme Coordinator and Academic Manager are implemented as dynamic tables that only display claims relevant to their current approval step. 
+1.3. GUI/UI Layout Implementation and Functionality
 
-Action Forms: Approval and rejection actions are implemented using dedicated HTML <form> elements with method="post". This is a critical security measure, replacing simple links and ensuring that state-changing actions are protected by Anti-Forgery Tokens (Microsoft, 2025a). 
+The user interface, constructed with Bootstrap, provides specific and functional workflows for each user role.
 
-Coordinator Actions: Only enabled for claims with Status == ClaimStatus.PendingReview. Actions update the status to either VerifiedByCoordinator or Rejected. 
+Claim Submission and File Upload (Lecturer)
 
-Manager Actions: Only enabled for claims with Status == ClaimStatus.VerifiedByCoordinator. Actions update the status to either ApprovedByManager or Rejected. 
+Form Security: Configured with enctype="multipart/form-data" for document uploads.
 
-Claim Details and Status Tracking 
+Secure File Handling: Server-side code processes the IFormFile stream, enforcing restrictions on file types (PDF/DOCX) and size (5MB limit), saving the file to a secure local path.
 
-The ViewDetails.cshtml page serves as the single source of truth for a claim. The status is represented dynamically using Razor C# logic: 
+Initial Status: Claims are persisted with the initial status of PendingReview.
 
-A C# @switch statement within the view inspects the Model.Status enum. 
+Review and Approval Workflows (Coordinator and Manager)
 
-The system then applies corresponding Bootstrap classes and icons (bg-warning, bg-success, bi-check-circle-fill, etc.) to visually and instantly inform the user of the claim’s position in the processing lifecycle. 
+Dynamic Dashboards: Dashboards display only the claims relevant to the current user's approval step.
 
- 
+Secure Actions: Actions use dedicated HTML <form> elements with method="post", secured by Anti-Forgery Tokens.
 
-Unit Test Documentation: Claim Management System 
+Coordinator Actions: Enabled only for claims with Status == ClaimStatus.PendingReview.
 
-This document outlines the purpose and functionality of the 17 unit tests defined in ClaimServiceTests.cs and ClaimsControllerTests.cs. These tests ensure that the core business logic (ClaimService) and the user interaction layer (ClaimsController) behave correctly under various scenarios, including valid input, boundary conditions, and user role-specific actions. 
+Manager Actions: Enabled only for claims with Status == ClaimStatus.VerifiedByCoordinator.
 
-I. ClaimService Tests (8 Total) 
+Claim Details and Status Tracking
 
-These tests validate the business logic and data manipulation within the ClaimService, focusing on claim creation, retrieval, status updates, and data validation. 
+The ViewDetails.cshtml page uses a Razor C# @switch statement to dynamically inspect the Model.Status enum and apply corresponding Bootstrap classes and icons (e.g., bg-warning, bg-success) for instant visual communication of the claim's status.
 
- 
+2. Data Modeling
 
-Test Method Name 
+2.1. UML Class Diagram and Key Relationships
 
-Purpose 
+The UML Class Diagram serves as the structural blueprint for the application's persistent data layer.
 
-Key Assertions 
+Key Relationships:
 
-1 
+User to Claim (1:M): A single Lecturer (User) can submit multiple claims. This is enforced by the LecturerId foreign key within the Claim entity.
 
-CreateClaimAsync_WithValidData_ReturnsClaimId 
+Claim to Document (1:M): Each claim can be supported by multiple documents. The ClaimId foreign key in the Document entity ensures all supporting evidence is directly linked.
 
-Ensures a claim is successfully created and returns a unique ID when all inputs (claim data and a valid file) are correct. 
+3. Unit Testing and Quality Assurance
 
-Returns a Claim ID greater than 0. Sets the initial claim status to PendingReview. 
+The core functionality is validated through 17 unit tests across two files: ClaimServiceTests.cs (business logic) and ClaimsControllerTests.cs (user interaction/routing).
 
-2 
+3.1. ClaimService Tests (8 Total)
 
-CreateClaimAsync_WithNullDocument_ThrowsArgumentException 
+These tests validate the business logic and data manipulation within the ClaimService.
 
-Validates that claim creation fails if the required supporting document is missing. 
+Test Method Name
 
-Throws an ArgumentException with a message indicating the document is required. 
+Purpose
 
-3 
+Key Assertions
 
-CreateClaimAsync_WithOversizedFile_ThrowsArgumentException 
+CreateClaimAsync_WithValidData_ReturnsClaimId
 
-Checks the file size restriction (5MB limit) on the supporting document upload. 
+Ensures successful claim creation.
 
-Throws an ArgumentException with a message indicating the file size limit was exceeded. 
+Returns Claim ID $> 0$; initial status set to PendingReview.
 
-4 
+CreateClaimAsync_WithNullDocument_ThrowsArgumentException
 
-CreateClaimAsync_WithInvalidFileType_ThrowsArgumentException 
+Validates rejection if a document is missing.
 
-Verifies that the service rejects files that are not of the permitted types (e.g., non-PDF, non-DOCX). 
+Throws ArgumentException (document is required).
 
-Throws an ArgumentException with a message indicating an invalid file type. 
+CreateClaimAsync_WithOversizedFile_ThrowsArgumentException
 
-5 
+Checks the 5MB file size restriction.
 
-GetClaimByIdAsync_WithExistingId_ReturnsClaim 
+Throws ArgumentException (size limit exceeded).
 
-Confirms that a previously created claim can be retrieved correctly using its ID. 
+CreateClaimAsync_WithInvalidFileType_ThrowsArgumentException
 
-Returns a non-null Claim object, and the returned object's ID matches the requested ID. 
+Verifies rejection of non-permitted file types.
 
-6 
+Throws ArgumentException (invalid file type).
 
-UpdateClaimStatusAsync_WithValidId_UpdatesStatus 
+GetClaimByIdAsync_WithExistingId_ReturnsClaim
 
-Validates the core status update mechanism by changing a claim's status. 
+Confirms a created claim can be retrieved correctly.
 
-Retrieves the claim after the update and asserts its status is the newly set value (VerifiedByCoordinator). 
+Returns a non-null Claim object matching the requested ID.
 
-7 
+UpdateClaimStatusAsync_WithValidId_UpdatesStatus
 
-GetPendingClaimsAsync_ForCoordinator_ReturnsOnlyPendingClaims 
+Validates the core status update mechanism.
 
-Ensures that the Coordinator dashboard data retrieval only pulls claims with the required PendingReview status. 
+Asserts the status is the newly set value (VerifiedByCoordinator).
 
-Returns a list with one or more claims, and all claims in the list have the status PendingReview. 
+GetPendingClaimsAsync_ForCoordinator_ReturnsOnlyPendingClaims
 
-8 
+Ensures the Coordinator dashboard retrieves only PendingReview claims.
 
-GetManagerDashboardDataAsync_ReturnsCorrectCounts 
+Returns a list where all claims have the status PendingReview.
 
-Verifies that the manager dashboard can correctly aggregate total claim counts (simulating a database summary). 
+GetManagerDashboardDataAsync_ReturnsCorrectCounts
 
-Returns a non-null dashboard object, and the TotalClaimsCount is greater than 0. 
+Verifies correct aggregation of total claim counts.
 
-II. ClaimsController Tests (9 Total) 
+Returns a dashboard object where TotalClaimsCount $> 0$.
 
-These tests validate the controller's actions, ensuring correct routing, view rendering, user authentication checks, and handling of user-submitted forms and action requests. 
+3.2. ClaimsController Tests (9 Total)
 
- 
+These tests validate the controller's actions, focusing on correct routing, view rendering, and form submission handling.
 
-Test Method Name 
+Test Method Name
 
-Purpose 
+Purpose
 
-Key Assertions 
+Key Assertions
 
-1 
+Index_ReturnsViewWithClaims
 
-Index_ReturnsViewWithClaims 
+Checks the Lecturer's index page loads and passes claims to the view.
 
-Checks that the Lecturer's index page loads correctly and passes the list of their submitted claims to the view. 
+Returns a ViewResult with the user's claims list as the model.
 
-Returns a ViewResult, and the model is a list containing the user's claims. 
+Create_Get_ReturnsView
 
-2 
+Ensures the HTTP GET for claim creation returns the expected view.
 
-Create_Get_ReturnsView 
+Returns a ViewResult with view name ~/Views/Claim/Create.cshtml.
 
-Ensures the HTTP GET request for the claim creation page successfully returns the expected view. 
+Create_Post_WithValidModel_RedirectsToIndex
 
-Returns a ViewResult with the explicit view name ~/Views/Claim/Create.cshtml. 
+Verifies successful submission.
 
-3 
+Returns a RedirectToActionResult to the Index action.
 
-Create_Post_WithValidModel_RedirectsToIndex 
+ViewDetails_WithValidId_ReturnsView
 
-Verifies the successful submission of a new claim, ensuring the controller calls the service and redirects the user. 
+Ensures successful viewing of claim details by ID.
 
-Returns a RedirectToActionResult to the Index action, and the CreateClaimAsync method is called exactly once with the correct LecturerId. 
+Returns a ViewResult with view name ~/Views/Claim/ViewDetails.cshtml and a non-null Claim model.
 
-4 
+ViewDetails_WithInvalidId_RedirectsToHome
 
-ViewDetails_WithValidId_ReturnsView 
+Tests the failure case for viewing details.
 
-Ensures that a user can successfully view the details of a claim by ID. 
+Returns a RedirectToActionResult to the Home/Index page.
 
-Returns a ViewResult with the explicit view name ~/Views/Claim/ViewDetails.cshtml and a non-null Claim model. 
+Verify_WithValidId_UpdatesStatusAndRedirects
 
-5 
+Checks the Coordinator's verification action.
 
-ViewDetails_WithInvalidId_RedirectsToHome 
+Calls UpdateClaimStatusAsync (VerifiedByCoordinator), redirects to Home/CoordinatorDashboard.
 
-Tests the failure case for viewing details, ensuring the user is redirected when a claim ID is not found. 
+Approve_WithValidId_UpdatesStatusAndRedirects
 
-Returns a RedirectToActionResult to the Home/Index page and sets an ErrorMessage in TempData. 
+Checks the Manager's approval action.
 
-6 
+Calls UpdateClaimStatusAsync (ApprovedByManager), redirects to Home/ManagerDashboard.
 
-Verify_WithValidId_UpdatesStatusAndRedirects 
+Reject_AsCoordinator_UpdatesStatusAndRedirects
 
-Checks the Coordinator's action to verify a claim. 
+Tests the Coordinator's rejection action.
 
-Calls UpdateClaimStatusAsync with the status VerifiedByCoordinator, redirects to Home/CoordinatorDashboard, and sets a SuccessMessage. 
+Calls UpdateClaimStatusAsync (Rejected), redirects to Home/CoordinatorDashboard.
 
-7 
+Reject_AsManager_UpdatesStatusAndRedirects
 
-Approve_WithValidId_UpdatesStatusAndRedirects 
+Tests the Manager's rejection action.
 
-Checks the Manager's action to approve a claim. 
+Calls UpdateClaimStatusAsync (Rejected), redirects to Home/ManagerDashboard.
 
-Calls UpdateClaimStatusAsync with the status ApprovedByManager, redirects to Home/ManagerDashboard, and sets a SuccessMessage. 
+3.3. Assumptions, Constraints, and Testing Scope
 
-8 
+Category
 
-Reject_AsCoordinator_UpdatesStatusAndRedirects 
+Detail
 
-Tests the Coordinator's rejection action. 
+Assumptions
 
-Calls UpdateClaimStatusAsync with the status Rejected, redirects to Home/CoordinatorDashboard, and sets a SuccessMessage. 
+ASP.NET Identity is properly configured, and all users have been correctly assigned one of the three required roles.
 
-9 
+Constraints
 
-Reject_AsManager_UpdatesStatusAndRedirects 
+File handling is restricted to local server path storage (no cloud integration). Audit logging is limited to high-level claim status changes.
 
-Tests the Manager's rejection action, ensuring correct redirection for the Manager role. 
+Testing Focus
 
-Calls UpdateClaimStatusAsync with the status Rejected, redirects to Home/ManagerDashboard, and sets a SuccessMessage. 
+Strictly constrained to the core business logic (calculation) and the state transition logic within the ClaimsController.
 
- 
+4. Project Management (Historical)
 
-1.4. Assumptions, Constraints, and Testing Scope 
+4.1. Historical Project Plan
 
-The following assumptions and constraints governed the implementation phase of the project: 
+The table below outlines the original project plan used to guide development through both Part 1 and Part 2.
 
-Assumptions 
+Phase
 
-Pre-existing Roles: It is assumed that the ASP.NET Identity system has been properly configured and that all users have been correctly assigned one of the three required roles (Lecturer, Coordinator, or Manager). 
+Task ID
 
-Valid Data: It is assumed that the input fields for hourly rate and hours worked will receive valid numerical data from the client, though server-side validation is implemented to prevent injection attacks and ensure data type integrity. 
+Task Description
 
-Constraints 
+Dependencies
 
-File Handling Scope: The document upload functionality is limited to saving the file to a local server path and storing the file path and name in the database. The scope does not include integration with external cloud storage services (e.g., Azure Blob Storage or Amazon S3). 
+Estimated Week
 
-Audit Logging: Comprehensive, low-level audit logging for every single field change is outside the current scope; logging is limited to high-level claim status changes (e.g., Approved, Rejected, Verified). 
+Phase 1: Planning & Prototyping
 
-Testing Focus: Unit testing efforts are strictly constrained to the core business logic, including the total claim amount calculation function and the state transition logic within the ClaimsController (e.g., ensuring a Coordinator cannot approve a claim that has not been submitted). 
+1.1.
 
-2. UML Class Diagram for Databases 
+Finalise the Project Scope and Requirements
 
-The UML Class Diagram models the core entities and their relationships, which were successfully mapped to the database schema using Entity Framework Core. 
+None
 
-The diagram illustrates the structural blueprint for the application's persistent data layer. 
+Week 1
 
-2.1. Key Relationships: 
 
-User to Claim (1:M): A single Lecturer (User) can submit multiple claims. The LecturerId foreign key within the Claim entity enforces this one-to-many relationship, ensuring every claim is traceable to its originator. 
 
-Claim to Document (1:M): Each claim can be supported by multiple documents (e.g., timesheets, receipts). The ClaimId foreign key in the Document entity ensures that all supporting evidence is linked directly to the parent claim. 
+1.2.
 
-3. Project Plan (Historical) 
+Set up the ASP.NET Core MVC Project Structure
 
-This section contains the original project plan used to guide the development process through both Part 1 and Part 2. 
+1.1
 
-Phase 
+Week 1
 
-Task ID 
 
-Task Description 
 
-Dependencies 
+1.3.
 
-Estimated Week 
+Design the Database Schema (UML Class Diagram)
 
-Phase 1: Planning & Prototyping 
+1.2
 
-1.1. 
+Week 2
 
-Finalise the Project Scope and Requirements 
 
-None 
 
-Week 1 
+1.4.
 
- 
+Implement ASP.NET Identity and Role-Based Setup
 
-1.2. 
+1.2
 
-Set up the ASP.NET Core MVC Project Structure 
+Week 2
 
-Task 1.1 
 
-Week 1 
 
- 
+1.5.
 
-1.3. 
+Develop the Non-Functional Prototyping Views (GUI/UI)
 
-Design the Database Schema (UML Class Diagram) 
+1.4
 
-Task 1.2 
+Week 3
 
-Week 2 
+Phase 2: Functional Implementation
 
- 
+2.1.
 
-1.4. 
+Implement Entity Framework Core and Database Migrations
 
-Implement ASP.NET Identity and Role-Based Setup 
+1.3
 
-Task 1.2 
+Week 4
 
-Week 2 
 
- 
 
-1.5. 
+2.2.
 
-Develop the Non-Functional Prototyping Views (GUI/UI) 
+Implement the Claim Submission and File Upload Functionality (Lecturer)
 
-Task 1.4 
+2.1
 
-Week 3 
+Week 4
 
-Phase 2: Functional Implementation 
 
-2.1. 
 
-Implement Entity Framework Core and Database Migrations 
+2.3.
 
-Task 1.3 
+Implement Coordinator Verification and Rejection Actions
 
-Week 4 
+2.1, 2.2
 
- 
+Week 5
 
-2.2. 
 
-Implement the Claim Submission and File Upload Functionality (Lecturer) 
 
-Task 2.1 
+2.4.
 
-Week 4 
+Implement Manager Approval and Rejection Actions
 
- 
+2.3
 
-2.3. 
+Week 6
 
-Implement Coordinator Verification and Rejection Actions 
 
-Task 2.1, 2.2 
 
-Week 5 
+2.5.
 
- 
+Implement Unit Tests for Business Logic (Calculation & Status)
 
-2.4. 
+2.2, 2.3
 
-Implement Manager Approval and Rejection Actions 
+Week 6
 
-Task 2.3 
+Phase 3: Finalization & Submission
 
-Week 6 
+3.1.
 
- 
+Write the detailed Project Documentation and Reporting
 
-2.5. 
+All tasks from Phase 2
 
-Implement Unit Tests for Business Logic (Calculation & Status) 
+Week 7
 
-Task 2.2, 2.3 
 
-Week 6 
 
-3. Finalization & Submission 
+3.2.
 
-3.1. 
+Review and refine all code and documentation
 
-Write the detailed Project Documentation and Reporting 
+All tasks from Phase 2
 
-All tasks from Phase 2 
+Week 7
 
-Week 7 
 
- 
 
-3.2. 
+3.3.
 
-Review and refine all code and documentation 
+Commit changes to the GitHub repository
 
-All tasks from Phase 2 
+Ongoing throughout all phases
 
-Week 7 
+Weeks 1-8
 
- 
 
-3.3. 
 
-Commit changes to the GitHub repository 
+3.4.
 
-Ongoing throughout all phases 
+Prepare and submit the final report in Microsoft Word format
 
-Weeks 1-8 
+All tasks from Phase 2
 
- 
+Week 8
 
-3.4. 
+Total Estimated Duration
 
-Prepare and submit the final report in Microsoft Word format 
 
-All tasks from Phase 2 
 
-Week 8 
 
- 
 
-Total Estimated Duration 
 
- 
 
- 
+2 Months
 
-2 Months 
+5. Submission Details & Links
 
- 
+The source code and documentation for this project are hosted on a publicly accessible GitHub repository, and the system demonstration is provided via an unlisted YouTube video.
 
- 
+Resource
 
-GITHUB Repo link: 
+Link
 
-https://github.com/ThembaTshudufhadzo/PROG6212POEPART2-CMCSWebApp.git 
+GitHub Repository
 
- 
+https://github.com/ThembaTshudufhadzo/PROG6212POEPART2-CMCSWebApp.git
 
-YouTube Video Link: 
+YouTube Video Demo
 
-https://youtu.be/GKdE6K-KUks 
+https://youtu.be/GKdE6K-KUks
 
+6. References
 
+Type
 
- 
+Reference
 
- 
+Book
 
- 
+Freeman, A. and Sandell, J. (2018). Pro ASP.NET Core MVC 2. 7th ed. Berkeley, CA: Apress.
 
- 
+Website
 
- 
+GitHub. (2025). Git and GitHub Documentation. Available at: https://docs.github.com/en/ (Accessed: 16 September 2025).
 
-4. Referencing List  
+Website
 
-Books and Journals 
+Mermaid. (2025). Mermaid Documentation. Available at: https://mermaid.js.org/documentation/ (Accessed: 16 September 2025).
 
-Freeman, A. and Sandell, J. (2018). Pro ASP.NET Core MVC 2. 7th ed. Berkeley, CA: Apress. 
+Website
 
-Websites and Online Documentation 
+Microsoft. (2025a). Introduction to ASP.NET Core MVC. Available at: https://docs.microsoft.com/en-us/aspnet/core/mvc/overview (Accessed: 15 October 2025).
 
-GitHub. (2025). Git and GitHub Documentation. Available at: https://docs.github.com/en/ (Accessed: 16 September 2025). 
+Website
 
-Mermaid. (2025). Mermaid Documentation. Available at: https://mermaid.js.org/documentation/  (Accessed: 16 September 2025). 
-
-Microsoft. (2025a). Introduction to ASP.NET Core MVC. Available at: https://docs.microsoft.com/en-us/aspnet/core/mvc/overview  (Accessed: 15 October 2025). 
-
-Microsoft. (2025b). Entity Framework Core Documentation. Available at: https://docs.microsoft.com/en-us/ef/core/  (Accessed: 15 O
+Microsoft. (2025b). Entity Framework Core Documentation. Available at: https://docs.microsoft.com/en-us/ef/core/ (Accessed: 15 October 2025).

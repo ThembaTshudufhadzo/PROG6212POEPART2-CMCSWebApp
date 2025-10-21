@@ -1,0 +1,18 @@
+{
+  "Claims": [
+    {
+      "ClaimId": 1,
+      "LecturerId": "72efc0a0-76a3-4eca-bc19-0aeab02b896d",
+      "LecturerName": "Lecturers bob",
+      "HoursWorked": 13,
+      "HourlyRate": 200,
+      "AdditionalNotes": "jidjd",
+      "SupportingDocumentPath": "SECURE_ENCRYPTED_PATH\\cc0aa271-8e0b-4772-ba66-525891aa894d.pdf",
+      "OriginalFileName": "PROG6212 Part 2 Checklist 2-1.pdf",
+      "Status": 2,
+      "ClaimPeriod": "October 2025",
+      "SubmissionDate": "2025-10-19T17:05:46.1430943+02:00"
+    }
+  ],
+  "NextClaimId": 2
+}

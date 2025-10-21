@@ -44,27 +44,18 @@ The core objective of CMCS is to streamline the monthly claim submission and app
 1.1. Project Overview and Functional Design
 
 Strategy
-
 Detail
-
 Technology
-
 ASP.NET Core MVC (C#)
-
 Data Persistence
 
 Entity Framework Core (EF Core) as the ORM to manage CRUD operations.
-
 Role-Based Security
-
 ASP.NET Identity enforces strict RBA for Lecturer, Programme Coordinator, and Academic Manager.
-
 Business Logic
-
 Server-side logic in the ClaimsController calculates the total claim amount (HoursWorked * HourlyRate) and manages the status update lifecycle.
 
 1.2. Database Structure and Data Persistence
-
 The structure, defined in Part 1, was instantiated using EF Core migrations.
 
 Claim Entity: Central to the system, storing metadata, claim period, and the critical Status property (an enumerated type) that controls visibility and progression.
@@ -80,21 +71,16 @@ The user interface, constructed with Bootstrap, provides specific and functional
 Claim Submission and File Upload (Lecturer)
 
 Form Security: Configured with enctype="multipart/form-data" for document uploads.
-
 Secure File Handling: Server-side code processes the IFormFile stream, enforcing restrictions on file types (PDF/DOCX) and size (5MB limit), saving the file to a secure local path.
 
 Initial Status: Claims are persisted with the initial status of PendingReview.
 
 Review and Approval Workflows (Coordinator and Manager)
-
 Dynamic Dashboards: Dashboards display only the claims relevant to the current user's approval step.
 
 Secure Actions: Actions use dedicated HTML <form> elements with method="post", secured by Anti-Forgery Tokens.
-
 Coordinator Actions: Enabled only for claims with Status == ClaimStatus.PendingReview.
-
 Manager Actions: Enabled only for claims with Status == ClaimStatus.VerifiedByCoordinator.
-
 Claim Details and Status Tracking
 
 The ViewDetails.cshtml page uses a Razor C# @switch statement to dynamically inspect the Model.Status enum and apply corresponding Bootstrap classes and icons (e.g., bg-warning, bg-success) for instant visual communication of the claim's status.
